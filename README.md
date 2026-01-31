@@ -1,67 +1,115 @@
 # Chemical Equipment Parameter Visualizer
 
-A hybrid system with Django backend, React web frontend, and PyQt5 desktop frontend.
-Both frontends consume the same REST API.
+A hybrid application for analyzing and visualizing chemical equipment data through both web and desktop interfaces. Upload CSV files containing equipment parameters and get instant analytics with interactive charts.
+
+## Overview
+
+This project demonstrates a full-stack hybrid application with:
+- **Web Interface**: React-based web application with Chart.js visualizations
+- **Desktop Interface**: PyQt5 native application with Matplotlib charts
+- **Backend API**: Django REST Framework handling data processing and storage
+- **Shared Database**: SQLite storing upload history and analytics
+
+Both frontends consume the same REST API, ensuring consistent functionality across platforms.
+
+---
+
+## Tech Stack
+
+| Component | Technology | Purpose |
+|-----------|-----------|---------|
+| Frontend (Web) | React.js + Chart.js | Interactive web interface with charts |
+| Frontend (Desktop) | PyQt5 + Matplotlib | Native desktop application |
+| Backend | Django + Django REST Framework | REST API for data processing |
+| Data Processing | Pandas | CSV parsing and analytics |
+| Database | SQLite | Store upload history (last 5 datasets) |
+| Version Control | Git + GitHub | Source code management |
+
+---
+
+## Features
+
+✅ **CSV Upload** - Upload equipment data files through web or desktop interface  
+✅ **Data Analysis** - Automatic calculation of averages and statistics  
+✅ **Visualization** - Interactive bar charts showing equipment type distribution  
+✅ **History Management** - View and access last 5 uploaded datasets  
+✅ **PDF Reports** - Generate downloadable PDF reports with full analytics  
+✅ **Authentication** - Token-based API authentication system  
+
+---
 
 ## Project Structure
 
 ```
-Fossee_project/
-├── backend/              # Django REST API
-├── frontend-web/         # React web application
-├── frontend-desktop/     # PyQt5 desktop application
-└── sample_data.csv       # Sample CSV for testing
+chemical-equipment-visualizer/
+├── backend/                    # Django REST API
+│   ├── api/                    # API application
+│   │   ├── models.py          # Database models
+│   │   ├── views.py           # API endpoints
+│   │   ├── serializers.py     # Data serialization
+│   │   └── urls.py            # URL routing
+│   ├── backend/               # Django settings
+│   ├── manage.py              # Django CLI
+│   └── requirements.txt       # Python dependencies
+│
+├── frontend-web/              # React web application
+│   ├── src/
+│   │   ├── components/        # React components
+│   │   ├── App.js            # Main component
+│   │   └── App.css           # Styling
+│   └── package.json          # Node dependencies
+│
+├── frontend-desktop/          # PyQt5 desktop application
+│   ├── main.py               # Desktop app (single file)
+│   └── requirements.txt      # Python dependencies
+│
+└── sample_data.csv           # Sample CSV for testing
 ```
 
 ---
 
-## Step 5: How to Run
+## Installation & Setup
 
 ### Prerequisites
 
-- Python 3.9+ installed
-- Node.js 16+ installed (for React)
-- pip and npm available in PATH
+- Python 3.9 or higher
+- Node.js 16 or higher
+- pip and npm
 
----
-
-### 1. Run Django Backend
+### 1. Backend Setup (Django)
 
 ```bash
-# Open terminal and navigate to backend folder
-cd d:\Fossee_project\backend
+# Navigate to backend directory
+cd backend
 
 # Create virtual environment (recommended)
 python -m venv venv
+
+# Activate virtual environment
+# Windows:
 venv\Scripts\activate
+# Mac/Linux:
+source venv/bin/activate
 
 # Install dependencies
 pip install -r requirements.txt
 
-# Run database migrations (creates SQLite database)
+# Run database migrations
 python manage.py migrate
 
-# Create a superuser (optional, for admin access)
-python manage.py createsuperuser
-
-# Start the development server
+# Start Django server
 python manage.py runserver
 ```
 
-**Backend will be running at: http://localhost:8000**
+Backend will run at: **http://127.0.0.1:8000**
 
-Test the API:
+### 2. Web Frontend Setup (React)
 
-- http://localhost:8000/api/history/ (should return empty list)
-- http://localhost:8000/admin/ (Django admin)
-
----
-
-### 2. Run React Web Frontend
+Open a new terminal:
 
 ```bash
-# Open NEW terminal and navigate to frontend-web
-cd d:\Fossee_project\frontend-web
+# Navigate to frontend-web directory
+cd frontend-web
 
 # Install dependencies
 npm install
@@ -70,141 +118,212 @@ npm install
 npm start
 ```
 
-**React app will be running at: http://localhost:3000**
+Web app will open at: **http://localhost:3000**
 
-The browser should open automatically. If not, visit http://localhost:3000
+### 3. Desktop Application Setup (PyQt5)
 
----
-
-### 3. Run PyQt5 Desktop App
+Open a new terminal:
 
 ```bash
-# Open NEW terminal and navigate to frontend-desktop
-cd d:\Fossee_project\frontend-desktop
-
-# Create virtual environment (recommended)
-python -m venv venv
-venv\Scripts\activate
+# Navigate to frontend-desktop directory
+cd frontend-desktop
 
 # Install dependencies
 pip install -r requirements.txt
 
-# Run the application
+# Run desktop application
 python main.py
 ```
 
-A desktop window will open with the application.
-
 ---
 
-## How to Use
+## Usage
 
-### Web App (React)
+### Web Application
 
-1. Open http://localhost:3000 in browser
-2. Drag & drop or click to select a CSV file
-3. View summary statistics and bar chart
-4. Click history items to view previous uploads
-5. Click "Download PDF" for reports
+1. Open http://localhost:3000 in your browser
+2. Click "Choose File" or drag and drop a CSV file
+3. View summary statistics and charts
+4. Access previous uploads from "Recent Uploads" section
+5. Download PDF reports for any dataset
 
-### Desktop App (PyQt5)
+### Desktop Application
 
-1. Click "Select CSV File" button
-2. Choose a CSV file (use sample_data.csv for testing)
-3. View summary statistics and bar chart
-4. Click history items to view previous uploads
+1. Launch the application with `python main.py`
+2. Click "Choose CSV File" button
+3. Select your CSV file
+4. View statistics and charts
+5. Access upload history and download reports
 
----
+### CSV Format
 
-## API Endpoints
+Your CSV file must include these columns:
+- Equipment Name
+- Type
+- Flowrate
+- Pressure
+- Temperature
 
-| Method | Endpoint            | Description                      |
-| ------ | ------------------- | -------------------------------- |
-| POST   | `/api/upload/`      | Upload CSV, returns summary JSON |
-| GET    | `/api/history/`     | Get last 5 uploaded datasets     |
-| GET    | `/api/report/<id>/` | Download PDF report              |
-| POST   | `/api/auth/login/`  | Get auth token                   |
-
-### CSV Format Required
-
+Example:
 ```csv
 Equipment Name,Type,Flowrate,Pressure,Temperature
 Pump-001,Pump,150.5,25.3,45.2
 Valve-001,Valve,0,15.6,42.1
 ```
 
----
-
-## Architecture Flow
-
-```
-┌─────────────────────┐
-│   React Frontend    │──────┐
-│   (Port 3000)       │      │
-└─────────────────────┘      │     HTTP/JSON
-                             ├────────────────┐
-┌─────────────────────┐      │                │
-│  PyQt5 Desktop App  │──────┘                ▼
-│   (Local)           │            ┌─────────────────────┐
-└─────────────────────┘            │   Django Backend    │
-                                   │   (Port 8000)       │
-                                   │   - REST API        │
-                                   │   - SQLite DB       │
-                                   │   - PDF Generation  │
-                                   └─────────────────────┘
-```
+Use the included `sample_data.csv` for testing.
 
 ---
 
-## Key Files Explained
+## API Endpoints
 
-### Backend
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/upload/` | Upload CSV and get analysis |
+| GET | `/api/history/` | Get last 5 uploaded datasets |
+| GET | `/api/report/<id>/` | Download PDF report |
+| POST | `/api/auth/login/` | Get authentication token |
 
-- `backend/settings.py` - Django configuration (CORS, DRF, database)
-- `api/models.py` - DatasetSummary model for storing uploads
-- `api/views.py` - API logic (upload, history, report generation)
-- `api/urls.py` - URL routing for API endpoints
+### Example API Usage
 
-### React Frontend
+**Upload CSV:**
+```bash
+curl -X POST http://127.0.0.1:8000/api/upload/ \
+  -F "file=@sample_data.csv"
+```
 
-- `src/App.js` - Main component, state management
-- `src/components/FileUpload.js` - Drag & drop file upload
-- `src/components/TypeChart.js` - Chart.js bar chart
-- `src/components/History.js` - Upload history list
+**Get History:**
+```bash
+curl http://127.0.0.1:8000/api/history/
+```
 
-### Desktop Frontend
+---
 
-- `main.py` - Single file with PyQt5 window, Matplotlib chart, API calls
+## Architecture
+
+```
+┌─────────────────┐
+│  React Web App  │────┐
+│  (Port 3000)    │    │
+└─────────────────┘    │
+                       │    HTTP/JSON
+┌─────────────────┐    │    Requests
+│ PyQt5 Desktop   │────┼──────────────► ┌──────────────────┐
+│ Application     │    │                │  Django Backend  │
+└─────────────────┘    │                │  (Port 8000)     │
+                       │                │                  │
+                       │                │  - REST API      │
+                       └────────────────│  - Pandas        │
+                                        │  - SQLite DB     │
+                                        │  - PDF Reports   │
+                                        └──────────────────┘
+```
+
+Both frontends communicate with the same Django backend, ensuring data consistency and shared functionality.
+
+---
+
+## Key Implementation Details
+
+### Backend (Django)
+- **Data Processing**: Pandas reads and analyzes CSV files
+- **Storage**: SQLite stores last 5 dataset summaries
+- **PDF Generation**: ReportLab creates downloadable reports
+- **Authentication**: Token-based auth using Django REST Framework
+
+### Frontend (Web)
+- **Framework**: React with functional components and hooks
+- **Charts**: Chart.js for interactive bar charts
+- **File Upload**: Drag-and-drop support with FormData API
+- **State Management**: React useState and useEffect hooks
+
+### Frontend (Desktop)
+- **Framework**: PyQt5 for native GUI
+- **Charts**: Matplotlib embedded in Qt widgets
+- **API Communication**: Requests library for HTTP calls
+- **Layout**: Grid and box layouts for responsive design
 
 ---
 
 ## Troubleshooting
 
+**Backend won't start:**
+- Ensure Python 3.9+ is installed
+- Check if port 8000 is available
+- Verify all dependencies are installed: `pip install -r requirements.txt`
+
+**Web app won't start:**
+- Ensure Node.js 16+ is installed
+- Delete `node_modules` and run `npm install` again
+- Check if port 3000 is available
+
+**Desktop app won't start:**
+- Install PyQt5: `pip install PyQt5`
+- Ensure backend is running first
+- Check Python version compatibility
+
+**CSV upload fails:**
+- Verify CSV has required columns (Equipment Name, Type, Flowrate, Pressure, Temperature)
+- Check file encoding (should be UTF-8)
+- Ensure backend is running
+
 **"Cannot connect to server" error:**
-
-- Make sure Django backend is running on port 8000
-- Check if CORS is enabled in Django settings
-
-**"Missing columns" error:**
-
-- Ensure CSV has exact column names: Equipment Name, Type, Flowrate, Pressure, Temperature
-
-**React build errors:**
-
-- Delete `node_modules` folder and run `npm install` again
-
-**PyQt5 import errors:**
-
-- Make sure virtual environment is activated
-- Run `pip install PyQt5 matplotlib requests`
+- Verify Django backend is running on port 8000
+- Check CORS settings in `backend/backend/settings.py`
+- Ensure firewall isn't blocking connections
 
 ---
 
-## Quick Test
+## Development
 
-1. Start Django backend (terminal 1)
-2. Start React frontend (terminal 2)
-3. Upload `sample_data.csv` from project root
-4. Verify:
-   - Summary shows: Total Count = 15
-   - Chart shows: Pump (4), Valve (4), Compressor (3), Heat Exchanger (2), Reactor (2)
+### Running Tests
+```bash
+# Backend tests
+cd backend
+python manage.py test
+
+# Frontend tests
+cd frontend-web
+npm test
+```
+
+### Building for Production
+
+**Web Frontend:**
+```bash
+cd frontend-web
+npm run build
+```
+
+**Backend:**
+```bash
+cd backend
+python manage.py collectstatic
+```
+
+---
+
+## Contributing
+
+This project was developed as part of an internship screening task. For questions or issues, please open an issue on GitHub.
+
+---
+
+## License
+
+This project is for educational purposes.
+
+---
+
+## Author
+
+Developed as part of FOSSEE Internship Screening Task
+
+---
+
+## Acknowledgments
+
+- Django REST Framework for the excellent API framework
+- React and Chart.js for web visualization
+- PyQt5 and Matplotlib for desktop application
+- Pandas for data processing capabilities
