@@ -1,20 +1,13 @@
 """
 Chemical Equipment Parameter Visualizer - Desktop Application
-PyQt5 + Matplotlib frontend that consumes the same Django REST API
-
-Features:
-- Upload CSV file to /api/upload/
-- Display summary statistics
-- Show bar chart of type distribution using Matplotlib
-- View upload history
+Simple, clean PyQt5 interface
 """
 
 import sys
 import requests
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
-    QPushButton, QLabel, QFileDialog, QListWidget, QListWidgetItem,
-    QMessageBox, QGroupBox, QGridLayout, QFrame
+    QPushButton, QLabel, QFileDialog, QListWidget, QMessageBox, QGridLayout
 )
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont
@@ -23,371 +16,281 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 
 
-# API Configuration
 API_BASE = 'https://chemical-equipment-backend-oelr.onrender.com/api'
 
 
 class ChartCanvas(FigureCanvas):
-    """
-    Matplotlib canvas widget for embedding charts in PyQt5.
-    Displays a bar chart of equipment type distribution.
-    """
-    
     def __init__(self, parent=None):
-        # Create figure with white background
-        self.figure = Figure(figsize=(5, 4), facecolor='white')
+        self.figure = Figure(figsize=(8, 4), facecolor='white')
         self.axes = self.figure.add_subplot(111)
         super().__init__(self.figure)
         self.setParent(parent)
-        
-        # Initial empty state
-        self.axes.set_title('Upload a CSV to see the chart')
-        self.axes.set_xlabel('Equipment Type')
-        self.axes.set_ylabel('Count')
+        self.axes.set_title('Upload CSV to see chart')
     
     def update_chart(self, distribution):
-        """
-        Update the bar chart with new type distribution data.
-        
-        Args:
-            distribution: dict like {"Pump": 5, "Valve": 3}
-        """
         self.axes.clear()
-        
         if not distribution:
             self.axes.set_title('No data')
             self.draw()
             return
         
-        # Prepare data
         types = list(distribution.keys())
         counts = list(distribution.values())
-        
-        # Create bar chart with vibrant colors
         colors = ['#667eea', '#764ba2', '#28a745', '#ffc107', '#dc3545', '#17a2b8']
-        bar_colors = colors[:len(types)]
         
-        bars = self.axes.bar(types, counts, color=bar_colors, edgecolor='black', linewidth=0.5)
+        bars = self.axes.bar(types, counts, color=colors[:len(types)], edgecolor='black', linewidth=0.5)
         
-        # Add value labels on bars
         for bar, count in zip(bars, counts):
             height = bar.get_height()
-            self.axes.text(
-                bar.get_x() + bar.get_width() / 2,
-                height,
-                str(int(count)),
-                ha='center', va='bottom',
-                fontsize=10, fontweight='bold'
-            )
+            self.axes.text(bar.get_x() + bar.get_width() / 2, height, str(int(count)),
+                          ha='center', va='bottom', fontsize=10, fontweight='bold')
         
-        # Styling
         self.axes.set_title('Equipment Type Distribution', fontsize=12, fontweight='bold')
-        self.axes.set_xlabel('Type', fontsize=10)
         self.axes.set_ylabel('Count', fontsize=10)
-        self.axes.set_ylim(0, max(counts) * 1.2)  # Add some headroom
-        
-        # Rotate labels if many types
         if len(types) > 4:
             self.axes.tick_params(axis='x', rotation=45)
-        
         self.figure.tight_layout()
         self.draw()
 
 
 class MainWindow(QMainWindow):
-    """
-    Main application window.
-    
-    Layout:
-    ┌─────────────────────────────────────────┐
-    │              Header                      │
-    ├───────────────────┬─────────────────────┤
-    │   Upload Button   │                     │
-    │   Summary Stats   │   Bar Chart         │
-    │   History List    │                     │
-    └───────────────────┴─────────────────────┘
-    """
-    
     def __init__(self):
         super().__init__()
         self.setWindowTitle('Equipment Data Analyzer')
-        self.setMinimumSize(1100, 650)
-        
-        # Store current summary data
+        self.setMinimumSize(1400, 800)
         self.current_summary = None
-        
-        # Setup UI
         self.setup_ui()
-        
-        # Load initial history
         self.load_history()
     
     def setup_ui(self):
-        """Create and arrange all UI components."""
-        
-        # Central widget and main layout
-        central_widget = QWidget()
-        self.setCentralWidget(central_widget)
-        main_layout = QVBoxLayout(central_widget)
-        main_layout.setSpacing(10)
-        main_layout.setContentsMargins(15, 15, 15, 15)
+        central = QWidget()
+        self.setCentralWidget(central)
+        main_layout = QVBoxLayout(central)
+        main_layout.setSpacing(0)
+        main_layout.setContentsMargins(0, 0, 0, 0)
         
         # Header
         header = QLabel('Equipment Data Analyzer')
-        header.setFont(QFont('Arial', 16, QFont.Bold))
+        header.setFont(QFont('Arial', 20, QFont.Bold))
         header.setAlignment(Qt.AlignCenter)
-        header.setStyleSheet('color: #2c2c2c; padding: 10px;')
+        header.setStyleSheet('background: #2c2c2c; color: white; padding: 25px;')
         main_layout.addWidget(header)
         
-        # Content area (horizontal split)
-        content_layout = QHBoxLayout()
-        content_layout.setSpacing(15)
+        # Content
+        content = QWidget()
+        content.setStyleSheet('background: #f5f5f5;')
+        content_layout = QHBoxLayout(content)
+        content_layout.setContentsMargins(20, 20, 20, 20)
+        content_layout.setSpacing(20)
         
-        # Left panel
-        left_panel = QVBoxLayout()
-        left_panel.setSpacing(10)
+        # Left sidebar
+        left = QWidget()
+        left.setMaximumWidth(300)
+        left_layout = QVBoxLayout(left)
+        left_layout.setSpacing(15)
         
-        # Upload section
-        upload_group = QGroupBox('Upload CSV')
-        upload_layout = QVBoxLayout(upload_group)
-        
+        # Upload button
         self.upload_btn = QPushButton('📁 Choose CSV File')
         self.upload_btn.setMinimumHeight(50)
         self.upload_btn.setStyleSheet('''
             QPushButton {
-                background-color: #2c2c2c;
+                background: #2c2c2c;
                 color: white;
                 border: none;
-                border-radius: 5px;
+                border-radius: 6px;
                 font-size: 14px;
                 font-weight: bold;
             }
-            QPushButton:hover {
-                background-color: #1a1a1a;
-            }
-            QPushButton:pressed {
-                background-color: #0a0a0a;
-            }
+            QPushButton:hover { background: #1a1a1a; }
         ''')
         self.upload_btn.clicked.connect(self.upload_file)
-        upload_layout.addWidget(self.upload_btn)
+        left_layout.addWidget(self.upload_btn)
         
-        self.status_label = QLabel('Select a CSV file to get started')
-        self.status_label.setAlignment(Qt.AlignCenter)
-        self.status_label.setStyleSheet('color: #666; font-size: 11px;')
-        upload_layout.addWidget(self.status_label)
+        # Status
+        self.status = QLabel('Ready to upload')
+        self.status.setAlignment(Qt.AlignCenter)
+        self.status.setStyleSheet('color: #666; font-size: 11px; padding: 5px;')
+        left_layout.addWidget(self.status)
         
-        left_panel.addWidget(upload_group)
-        
-        # Summary section
-        summary_group = QGroupBox('Summary Statistics')
-        summary_layout = QGridLayout(summary_group)
-        
-        # Create labels for stats
-        self.stat_labels = {}
-        stats = [
-            ('total_count', 'Total Count'),
-            ('avg_flowrate', 'Avg Flowrate'),
-            ('avg_pressure', 'Avg Pressure'),
-            ('avg_temperature', 'Avg Temperature')
-        ]
-        
-        for i, (key, label) in enumerate(stats):
-            row = i // 2
-            col = i % 2
-            
-            stat_frame = QFrame()
-            stat_frame.setStyleSheet('''
-                QFrame {
-                    background-color: #f8f9fa;
-                    border-radius: 5px;
-                    padding: 5px;
-                }
-            ''')
-            stat_layout = QVBoxLayout(stat_frame)
-            stat_layout.setContentsMargins(10, 5, 10, 5)
-            
-            value_label = QLabel('--')
-            value_label.setFont(QFont('Arial', 18, QFont.Bold))
-            value_label.setAlignment(Qt.AlignCenter)
-            value_label.setStyleSheet('color: #2c2c2c;')
-            self.stat_labels[key] = value_label
-            
-            name_label = QLabel(label)
-            name_label.setAlignment(Qt.AlignCenter)
-            name_label.setStyleSheet('color: #666; font-size: 10px;')
-            
-            stat_layout.addWidget(value_label)
-            stat_layout.addWidget(name_label)
-            
-            summary_layout.addWidget(stat_frame, row, col)
-        
-        left_panel.addWidget(summary_group)
-        
-        # History section
-        history_group = QGroupBox('Recent Uploads')
-        history_layout = QVBoxLayout(history_group)
+        # History
+        history_label = QLabel('Recent Uploads')
+        history_label.setStyleSheet('color: #2c2c2c; font-size: 13px; font-weight: bold; padding: 10px 0;')
+        left_layout.addWidget(history_label)
         
         self.history_list = QListWidget()
         self.history_list.setStyleSheet('''
             QListWidget {
+                background: white;
                 border: 1px solid #ddd;
-                border-radius: 5px;
+                border-radius: 6px;
+                padding: 5px;
             }
             QListWidget::item {
-                padding: 8px;
+                padding: 10px;
                 border-bottom: 1px solid #eee;
             }
             QListWidget::item:selected {
-                background-color: #e8e8ff;
+                background: #e8e8ff;
                 color: #333;
             }
-            QListWidget::item:hover {
-                background-color: #f5f5ff;
-            }
         ''')
-        self.history_list.itemClicked.connect(self.on_history_item_clicked)
-        history_layout.addWidget(self.history_list)
+        self.history_list.itemClicked.connect(self.on_history_click)
+        left_layout.addWidget(self.history_list)
         
-        # Refresh button
-        refresh_btn = QPushButton('🔄 Refresh')
-        refresh_btn.clicked.connect(self.load_history)
-        history_layout.addWidget(refresh_btn)
+        # Download button
+        self.download_btn = QPushButton('📄 Download PDF')
+        self.download_btn.setEnabled(False)
+        self.download_btn.setStyleSheet('''
+            QPushButton {
+                background: #2c2c2c;
+                color: white;
+                border: none;
+                border-radius: 6px;
+                padding: 12px;
+                font-size: 12px;
+            }
+            QPushButton:hover:enabled { background: #1a1a1a; }
+            QPushButton:disabled { background: #ccc; color: #666; }
+        ''')
+        self.download_btn.clicked.connect(self.download_report)
+        left_layout.addWidget(self.download_btn)
         
-        left_panel.addWidget(history_group)
+        left_layout.addStretch()
+        content_layout.addWidget(left)
         
-        # Add left panel to content
-        left_widget = QWidget()
-        left_widget.setLayout(left_panel)
-        left_widget.setMaximumWidth(350)
-        content_layout.addWidget(left_widget)
+        # Right side
+        right = QWidget()
+        right_layout = QVBoxLayout(right)
+        right_layout.setSpacing(10)
+        right_layout.setContentsMargins(0, 0, 0, 0)
         
-        # Right panel - Chart
-        chart_group = QGroupBox('Equipment Types')
-        chart_layout = QVBoxLayout(chart_group)
+        # Statistics (takes exactly half the height)
+        stats_container = QWidget()
+        stats_container.setStyleSheet('background: white; border-radius: 8px; padding: 15px;')
+        stats_layout = QGridLayout(stats_container)
+        stats_layout.setSpacing(15)
+        stats_layout.setContentsMargins(15, 15, 15, 15)
+        
+        self.stat_labels = {}
+        stats = [
+            ('total_count', 'TOTAL'),
+            ('avg_flowrate', 'AVG FLOW'),
+            ('avg_pressure', 'AVG PRESSURE'),
+            ('avg_temperature', 'AVG TEMP')
+        ]
+        
+        for i, (key, label) in enumerate(stats):
+            stat_widget = QWidget()
+            stat_widget.setStyleSheet('background: #fafafa; border: 1px solid #e5e5e5; border-radius: 6px; padding: 20px;')
+            stat_layout_inner = QVBoxLayout(stat_widget)
+            stat_layout_inner.setSpacing(10)
+            
+            name = QLabel(label)
+            name.setAlignment(Qt.AlignCenter)
+            name.setStyleSheet('color: #666; font-size: 11px; font-weight: 600;')
+            stat_layout_inner.addWidget(name)
+            
+            value = QLabel('--')
+            value.setFont(QFont('Arial', 36, QFont.Bold))
+            value.setAlignment(Qt.AlignCenter)
+            value.setStyleSheet('color: #2c2c2c;')
+            self.stat_labels[key] = value
+            stat_layout_inner.addWidget(value)
+            
+            stats_layout.addWidget(stat_widget, 0, i)
+        
+        right_layout.addWidget(stats_container, stretch=1)
+        
+        # Chart (takes exactly half the height)
+        chart_container = QWidget()
+        chart_container.setStyleSheet('background: white; border-radius: 8px; padding: 15px;')
+        chart_layout = QVBoxLayout(chart_container)
+        chart_layout.setContentsMargins(0, 0, 0, 0)
         
         self.chart = ChartCanvas()
         chart_layout.addWidget(self.chart)
+        right_layout.addWidget(chart_container, stretch=1)
         
-        content_layout.addWidget(chart_group, stretch=1)
-        
-        main_layout.addLayout(content_layout)
+        content_layout.addWidget(right, stretch=1)
+        main_layout.addWidget(content)
     
     def upload_file(self):
-        """
-        Open file dialog, select CSV, upload to backend API.
-        """
-        # Open file dialog
-        file_path, _ = QFileDialog.getOpenFileName(
-            self,
-            'Select CSV File',
-            '',
-            'CSV Files (*.csv);;All Files (*)'
-        )
-        
+        file_path, _ = QFileDialog.getOpenFileName(self, 'Select CSV', '', 'CSV Files (*.csv)')
         if not file_path:
-            return  # User cancelled
+            return
         
-        self.status_label.setText('Uploading...')
+        self.status.setText('Uploading...')
         self.upload_btn.setEnabled(False)
         
         try:
-            # Upload file to API
             with open(file_path, 'rb') as f:
-                files = {'file': f}
-                response = requests.post(f'{API_BASE}/upload/', files=files)
+                response = requests.post(f'{API_BASE}/upload/', files={'file': f})
             
             if response.status_code == 201:
-                # Success
                 data = response.json()
                 self.current_summary = data
-                self.update_summary_display(data)
-                self.chart.update_chart(data.get('type_distribution', {}))
-                self.status_label.setText('✅ Upload successful!')
-                self.load_history()  # Refresh history
+                self.update_display(data)
+                self.status.setText('✅ Upload successful!')
+                self.load_history()
             else:
-                # Error from server
-                error = response.json().get('error', 'Unknown error')
-                self.status_label.setText(f'❌ Error: {error}')
-                QMessageBox.warning(self, 'Upload Error', error)
-                
-        except requests.exceptions.ConnectionError:
-            self.status_label.setText('❌ Cannot connect to server')
-            QMessageBox.critical(
-                self, 
-                'Connection Error',
-                'Cannot connect to the backend server.\n'
-                'Make sure Django is running on localhost:8000'
-            )
+                error = response.json().get('error', 'Upload failed')
+                self.status.setText(f'❌ {error}')
+                QMessageBox.warning(self, 'Error', error)
         except Exception as e:
-            self.status_label.setText(f'❌ Error: {str(e)}')
+            self.status.setText(f'❌ Error')
             QMessageBox.critical(self, 'Error', str(e))
         finally:
             self.upload_btn.setEnabled(True)
     
-    def update_summary_display(self, data):
-        """
-        Update the summary statistics display with new data.
-        """
+    def update_display(self, data):
         self.stat_labels['total_count'].setText(str(data.get('total_count', '--')))
         self.stat_labels['avg_flowrate'].setText(f"{data.get('avg_flowrate', 0):.2f}")
         self.stat_labels['avg_pressure'].setText(f"{data.get('avg_pressure', 0):.2f}")
         self.stat_labels['avg_temperature'].setText(f"{data.get('avg_temperature', 0):.2f}")
+        self.chart.update_chart(data.get('type_distribution', {}))
+        self.download_btn.setEnabled(True)
     
     def load_history(self):
-        """
-        Fetch upload history from backend API.
-        """
         self.history_list.clear()
-        
         try:
             response = requests.get(f'{API_BASE}/history/')
-            
             if response.status_code == 200:
-                history = response.json()
-                
-                for item in history:
-                    # Format display text
+                for item in response.json():
                     timestamp = item.get('uploaded_at', '')[:19].replace('T', ' ')
-                    count = item.get('total_count', 0)
-                    text = f"#{item['id']} - {timestamp}\n{count} records"
-                    
-                    list_item = QListWidgetItem(text)
-                    list_item.setData(Qt.UserRole, item)  # Store full data
-                    self.history_list.addItem(list_item)
-                    
-        except requests.exceptions.ConnectionError:
-            # Server not running - that's okay for history
+                    text = f"#{item['id']} - {timestamp}\n{item.get('total_count', 0)} records"
+                    list_item = self.history_list.addItem(text)
+                    self.history_list.item(self.history_list.count() - 1).setData(Qt.UserRole, item)
+        except:
             pass
-        except Exception as e:
-            print(f'Error loading history: {e}')
     
-    def on_history_item_clicked(self, item):
-        """
-        When user clicks a history item, display its summary and chart.
-        """
+    def on_history_click(self, item):
         data = item.data(Qt.UserRole)
         if data:
             self.current_summary = data
-            self.update_summary_display(data)
-            self.chart.update_chart(data.get('type_distribution', {}))
-            self.status_label.setText(f"Viewing dataset #{data['id']}")
-
-
-def main():
-    """Application entry point."""
-    app = QApplication(sys.argv)
+            self.update_display(data)
+            self.status.setText(f"Viewing dataset #{data['id']}")
     
-    # Set application style
-    app.setStyle('Fusion')
-    
-    # Create and show main window
-    window = MainWindow()
-    window.show()
-    
-    # Run event loop
-    sys.exit(app.exec_())
+    def download_report(self):
+        if not self.current_summary:
+            return
+        
+        dataset_id = self.current_summary.get('id')
+        try:
+            response = requests.get(f'{API_BASE}/report/{dataset_id}/', stream=True)
+            if response.status_code == 200:
+                file_path, _ = QFileDialog.getSaveFileName(
+                    self, 'Save PDF', f'report_{dataset_id}.pdf', 'PDF Files (*.pdf)')
+                if file_path:
+                    with open(file_path, 'wb') as f:
+                        f.write(response.content)
+                    QMessageBox.information(self, 'Success', 'Report saved!')
+        except Exception as e:
+            QMessageBox.critical(self, 'Error', str(e))
 
 
 if __name__ == '__main__':
-    main()
+    app = QApplication(sys.argv)
+    app.setStyle('Fusion')
+    window = MainWindow()
+    window.show()
+    sys.exit(app.exec_())
