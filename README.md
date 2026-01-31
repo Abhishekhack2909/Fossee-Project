@@ -1,137 +1,107 @@
 # Chemical Equipment Parameter Visualizer
 
-A hybrid application for analyzing and visualizing chemical equipment data through both web and desktop interfaces. Upload CSV files containing equipment parameters and get instant analytics with interactive charts.
+A full-stack application for analyzing chemical equipment data with both web and desktop interfaces. Upload CSV files and get instant analytics with interactive visualizations.
 
-## Overview
+## 🌐 Live Demo
 
-This project demonstrates a full-stack hybrid application with:
-- **Web Interface**: React-based web application with Chart.js visualizations
-- **Desktop Interface**: PyQt5 native application with Matplotlib charts
-- **Backend API**: Django REST Framework handling data processing and storage
-- **Shared Database**: SQLite storing upload history and analytics
+**Web Application**: https://fossee-project.vercel.app/
 
-Both frontends consume the same REST API, ensuring consistent functionality across platforms.
+Try it now! Upload the included `sample_data.csv` file to see it in action.
 
 ---
 
-## Tech Stack
+## Overview
 
-| Component | Technology | Purpose |
-|-----------|-----------|---------|
-| Frontend (Web) | React.js + Chart.js | Interactive web interface with charts |
-| Frontend (Desktop) | PyQt5 + Matplotlib | Native desktop application |
-| Backend | Django + Django REST Framework | REST API for data processing |
-| Data Processing | Pandas | CSV parsing and analytics |
-| Database | SQLite | Store upload history (last 5 datasets) |
-| Version Control | Git + GitHub | Source code management |
+This hybrid application provides:
+- **Web Interface**: React app with Chart.js visualizations
+- **Desktop Interface**: PyQt5 native application with Matplotlib charts
+- **REST API Backend**: Django backend for data processing
+- **Database**: SQLite for storing upload history
+
+Both interfaces use the same API, ensuring consistent functionality.
 
 ---
 
 ## Features
 
-✅ **CSV Upload** - Upload equipment data files through web or desktop interface  
-✅ **Data Analysis** - Automatic calculation of averages and statistics  
-✅ **Visualization** - Interactive bar charts showing equipment type distribution  
-✅ **History Management** - View and access last 5 uploaded datasets  
-✅ **PDF Reports** - Generate downloadable PDF reports with full analytics  
-✅ **Authentication** - Token-based API authentication system  
+✅ CSV file upload (drag & drop supported)  
+✅ Automatic data analysis and statistics  
+✅ Interactive bar charts  
+✅ Upload history (last 5 datasets)  
+✅ PDF report generation  
+✅ Token-based authentication  
 
 ---
 
-## Project Structure
+## Tech Stack
 
-```
-chemical-equipment-visualizer/
-├── backend/                    # Django REST API
-│   ├── api/                    # API application
-│   │   ├── models.py          # Database models
-│   │   ├── views.py           # API endpoints
-│   │   ├── serializers.py     # Data serialization
-│   │   └── urls.py            # URL routing
-│   ├── backend/               # Django settings
-│   ├── manage.py              # Django CLI
-│   └── requirements.txt       # Python dependencies
-│
-├── frontend-web/              # React web application
-│   ├── src/
-│   │   ├── components/        # React components
-│   │   ├── App.js            # Main component
-│   │   └── App.css           # Styling
-│   └── package.json          # Node dependencies
-│
-├── frontend-desktop/          # PyQt5 desktop application
-│   ├── main.py               # Desktop app (single file)
-│   └── requirements.txt      # Python dependencies
-│
-└── sample_data.csv           # Sample CSV for testing
-```
+| Component | Technology |
+|-----------|-----------|
+| Frontend (Web) | React.js + Chart.js |
+| Frontend (Desktop) | PyQt5 + Matplotlib |
+| Backend | Django + Django REST Framework |
+| Data Processing | Pandas |
+| Database | SQLite |
 
 ---
 
-## Installation & Setup
+## Quick Start
 
-### Prerequisites
+### Option 1: Use the Live Web App (Easiest)
 
-- Python 3.9 or higher
-- Node.js 16 or higher
-- pip and npm
+Just visit: **https://fossee-project.vercel.app/**
 
-### 1. Backend Setup (Django)
+No installation needed! Upload your CSV and start analyzing.
+
+### Option 2: Run Locally
+
+#### Prerequisites
+- Python 3.9+
+- Node.js 16+
+
+#### Backend Setup (5 minutes)
 
 ```bash
-# Navigate to backend directory
+# 1. Navigate to backend
 cd backend
 
-# Create virtual environment (recommended)
-python -m venv venv
-
-# Activate virtual environment
-# Windows:
-venv\Scripts\activate
-# Mac/Linux:
-source venv/bin/activate
-
-# Install dependencies
+# 2. Install dependencies
 pip install -r requirements.txt
 
-# Run database migrations
+# 3. Setup database
 python manage.py migrate
 
-# Start Django server
+# 4. Start server
 python manage.py runserver
 ```
 
-Backend will run at: **http://127.0.0.1:8000**
+Backend runs at: http://127.0.0.1:8000
 
-### 2. Web Frontend Setup (React)
-
-Open a new terminal:
+#### Web Frontend Setup (3 minutes)
 
 ```bash
-# Navigate to frontend-web directory
+# 1. Navigate to frontend-web (open new terminal)
 cd frontend-web
 
-# Install dependencies
+# 2. Install dependencies
 npm install
 
-# Start development server
+# 3. Start app
 npm start
 ```
 
-Web app will open at: **http://localhost:3000**
+Web app opens at: http://localhost:3000
 
-### 3. Desktop Application Setup (PyQt5)
-
-Open a new terminal:
+#### Desktop App Setup (2 minutes)
 
 ```bash
-# Navigate to frontend-desktop directory
+# 1. Navigate to frontend-desktop (open new terminal)
 cd frontend-desktop
 
-# Install dependencies
+# 2. Install dependencies
 pip install -r requirements.txt
 
-# Run desktop application
+# 3. Run app
 python main.py
 ```
 
@@ -141,37 +111,61 @@ python main.py
 
 ### Web Application
 
-1. Open http://localhost:3000 in your browser
-2. Click "Choose File" or drag and drop a CSV file
-3. View summary statistics and charts
-4. Access previous uploads from "Recent Uploads" section
-5. Download PDF reports for any dataset
+1. Visit https://fossee-project.vercel.app/
+2. Click "Choose File" or drag & drop your CSV
+3. View statistics and charts instantly
+4. Access previous uploads from "Recent Uploads"
+5. Download PDF reports
 
 ### Desktop Application
 
-1. Launch the application with `python main.py`
-2. Click "Choose CSV File" button
-3. Select your CSV file
-4. View statistics and charts
-5. Access upload history and download reports
+1. Launch with `python main.py`
+2. Click "Choose CSV File"
+3. Select your file
+4. View results and charts
+5. Access history and download reports
 
-### CSV Format
+### CSV Format Required
 
-Your CSV file must include these columns:
-- Equipment Name
-- Type
-- Flowrate
-- Pressure
-- Temperature
+Your CSV must have these columns:
+```
+Equipment Name, Type, Flowrate, Pressure, Temperature
+```
 
-Example:
+**Example:**
 ```csv
 Equipment Name,Type,Flowrate,Pressure,Temperature
 Pump-001,Pump,150.5,25.3,45.2
 Valve-001,Valve,0,15.6,42.1
 ```
 
-Use the included `sample_data.csv` for testing.
+Use `sample_data.csv` (included) for testing.
+
+---
+
+## Project Structure
+
+```
+chemical-equipment-visualizer/
+├── backend/                    # Django REST API
+│   ├── api/                    # API endpoints
+│   ├── backend/               # Settings
+│   ├── manage.py
+│   └── requirements.txt
+│
+├── frontend-web/              # React web app
+│   ├── src/
+│   │   ├── components/
+│   │   ├── App.js
+│   │   └── App.css
+│   └── package.json
+│
+├── frontend-desktop/          # PyQt5 desktop app
+│   ├── main.py
+│   └── requirements.txt
+│
+└── sample_data.csv           # Sample data
+```
 
 ---
 
@@ -179,151 +173,123 @@ Use the included `sample_data.csv` for testing.
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| POST | `/api/upload/` | Upload CSV and get analysis |
-| GET | `/api/history/` | Get last 5 uploaded datasets |
+| POST | `/api/upload/` | Upload CSV file |
+| GET | `/api/history/` | Get last 5 uploads |
 | GET | `/api/report/<id>/` | Download PDF report |
-| POST | `/api/auth/login/` | Get authentication token |
+| POST | `/api/auth/login/` | Get auth token |
 
-### Example API Usage
+**Backend URL**: https://chemical-equipment-backend-oelr.onrender.com
 
-**Upload CSV:**
+**Example:**
 ```bash
-curl -X POST http://127.0.0.1:8000/api/upload/ \
-  -F "file=@sample_data.csv"
-```
-
-**Get History:**
-```bash
-curl http://127.0.0.1:8000/api/history/
+curl https://chemical-equipment-backend-oelr.onrender.com/api/history/
 ```
 
 ---
 
-## Architecture
+## Deployment
 
-```
-┌─────────────────┐
-│  React Web App  │────┐
-│  (Port 3000)    │    │
-└─────────────────┘    │
-                       │    HTTP/JSON
-┌─────────────────┐    │    Requests
-│ PyQt5 Desktop   │────┼──────────────► ┌──────────────────┐
-│ Application     │    │                │  Django Backend  │
-└─────────────────┘    │                │  (Port 8000)     │
-                       │                │                  │
-                       │                │  - REST API      │
-                       └────────────────│  - Pandas        │
-                                        │  - SQLite DB     │
-                                        │  - PDF Reports   │
-                                        └──────────────────┘
-```
+### Live URLs
 
-Both frontends communicate with the same Django backend, ensuring data consistency and shared functionality.
+- **Frontend**: https://fossee-project.vercel.app/
+- **Backend**: https://chemical-equipment-backend-oelr.onrender.com
+
+### Hosting Platforms
+
+- Frontend: Vercel
+- Backend: Render
+- Database: SQLite (file-based)
 
 ---
 
-## Key Implementation Details
+## Screenshots
 
-### Backend (Django)
-- **Data Processing**: Pandas reads and analyzes CSV files
-- **Storage**: SQLite stores last 5 dataset summaries
-- **PDF Generation**: ReportLab creates downloadable reports
-- **Authentication**: Token-based auth using Django REST Framework
+### Web Interface
+- Clean, modern design
+- Drag & drop file upload
+- Real-time statistics
+- Colorful bar charts
+- Upload history with PDF download
 
-### Frontend (Web)
-- **Framework**: React with functional components and hooks
-- **Charts**: Chart.js for interactive bar charts
-- **File Upload**: Drag-and-drop support with FormData API
-- **State Management**: React useState and useEffect hooks
-
-### Frontend (Desktop)
-- **Framework**: PyQt5 for native GUI
-- **Charts**: Matplotlib embedded in Qt widgets
-- **API Communication**: Requests library for HTTP calls
-- **Layout**: Grid and box layouts for responsive design
-
----
-
-## Troubleshooting
-
-**Backend won't start:**
-- Ensure Python 3.9+ is installed
-- Check if port 8000 is available
-- Verify all dependencies are installed: `pip install -r requirements.txt`
-
-**Web app won't start:**
-- Ensure Node.js 16+ is installed
-- Delete `node_modules` and run `npm install` again
-- Check if port 3000 is available
-
-**Desktop app won't start:**
-- Install PyQt5: `pip install PyQt5`
-- Ensure backend is running first
-- Check Python version compatibility
-
-**CSV upload fails:**
-- Verify CSV has required columns (Equipment Name, Type, Flowrate, Pressure, Temperature)
-- Check file encoding (should be UTF-8)
-- Ensure backend is running
-
-**"Cannot connect to server" error:**
-- Verify Django backend is running on port 8000
-- Check CORS settings in `backend/backend/settings.py`
-- Ensure firewall isn't blocking connections
+### Desktop Interface
+- Native application window
+- File picker dialog
+- Matplotlib visualizations
+- Same functionality as web
 
 ---
 
 ## Development
 
-### Running Tests
+### Run Tests
 ```bash
-# Backend tests
+# Backend
 cd backend
 python manage.py test
 
-# Frontend tests
+# Frontend
 cd frontend-web
 npm test
 ```
 
-### Building for Production
-
-**Web Frontend:**
+### Build for Production
 ```bash
+# Web frontend
 cd frontend-web
 npm run build
-```
 
-**Backend:**
-```bash
+# Backend
 cd backend
 python manage.py collectstatic
 ```
 
 ---
 
+## Troubleshooting
+
+**Backend won't start:**
+- Check Python version (3.9+)
+- Install dependencies: `pip install -r requirements.txt`
+- Run migrations: `python manage.py migrate`
+
+**Web app won't start:**
+- Check Node.js version (16+)
+- Delete `node_modules` and run `npm install`
+- Check port 3000 availability
+
+**Desktop app won't start:**
+- Install PyQt5: `pip install PyQt5`
+- Ensure backend is running
+- Check Python compatibility
+
+**CSV upload fails:**
+- Verify required columns exist
+- Check file encoding (UTF-8)
+- Ensure backend is running
+
+---
+
 ## Contributing
 
-This project was developed as part of an internship screening task. For questions or issues, please open an issue on GitHub.
+This project was developed as part of the FOSSEE Internship Screening Task.
 
 ---
 
 ## License
 
-This project is for educational purposes.
+Educational purposes only.
 
 ---
 
 ## Author
 
-Developed as part of FOSSEE Internship Screening Task
+Developed for FOSSEE Internship Screening Task
 
 ---
 
 ## Acknowledgments
 
-- Django REST Framework for the excellent API framework
-- React and Chart.js for web visualization
-- PyQt5 and Matplotlib for desktop application
-- Pandas for data processing capabilities
+- Django REST Framework
+- React and Chart.js
+- PyQt5 and Matplotlib
+- Pandas for data processing
