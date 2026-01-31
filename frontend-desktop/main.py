@@ -24,7 +24,7 @@ from matplotlib.figure import Figure
 
 
 # API Configuration
-API_BASE = 'http://localhost:8000/api'
+API_BASE = 'https://chemical-equipment-backend-oelr.onrender.com/api'
 
 
 class ChartCanvas(FigureCanvas):
@@ -110,8 +110,8 @@ class MainWindow(QMainWindow):
     
     def __init__(self):
         super().__init__()
-        self.setWindowTitle('Chemical Equipment Visualizer')
-        self.setMinimumSize(900, 600)
+        self.setWindowTitle('Equipment Data Analyzer')
+        self.setMinimumSize(1100, 650)
         
         # Store current summary data
         self.current_summary = None
