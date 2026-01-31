@@ -14,7 +14,7 @@ import TypeChart from "./components/TypeChart";
 import History from "./components/History";
 
 // API base URL - Django backend
-const API_BASE = "http://localhost:8000/api";
+const API_BASE = "https://chemical-equipment-backend-oelr.onrender.com/api";
 
 function App() {
   // State for current summary (after upload)
