@@ -36,26 +36,24 @@ function History({ history, onItemClick, onDownloadReport }) {
   return (
     <div className="card">
       <h2>Upload History</h2>
-      <ul className="history-list">
+      <div className="history-list">
         {history.map((item) => (
-          <li
+          <div
             key={item.id}
             className="history-item"
             onClick={() => onItemClick(item)}
           >
-            <div className="date">{formatDate(item.uploaded_at)}</div>
-            <div className="stats">{item.total_count} equipment records</div>
-            <div className="actions">
-              <button
-                className="download-btn"
-                onClick={(e) => handleDownload(e, item.id)}
-              >
-                Download PDF
-              </button>
-            </div>
-          </li>
+            <div className="timestamp">{formatDate(item.uploaded_at)}</div>
+            <div className="count">{item.total_count} equipment records</div>
+            <button
+              className="download-btn"
+              onClick={(e) => handleDownload(e, item.id)}
+            >
+              Download PDF
+            </button>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }

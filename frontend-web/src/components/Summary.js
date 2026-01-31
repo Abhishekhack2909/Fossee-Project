@@ -24,9 +24,9 @@ function Summary({ data }) {
       <h2>Summary Statistics</h2>
       <div className="summary-grid">
         {stats.map((stat) => (
-          <div key={stat.label} className="summary-stat">
-            <div className="value">{stat.value}</div>
+          <div key={stat.label} className="summary-item">
             <div className="label">{stat.label}</div>
+            <div className="value">{stat.value}</div>
           </div>
         ))}
       </div>

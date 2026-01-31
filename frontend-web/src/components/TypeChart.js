@@ -35,7 +35,7 @@ function TypeChart({ distribution }) {
   const labels = Object.keys(distribution);
   const values = Object.values(distribution);
 
-  // Chart colors - one for each type
+  // Chart colors - vibrant palette
   const backgroundColors = [
     "rgba(102, 126, 234, 0.8)",
     "rgba(118, 75, 162, 0.8)",

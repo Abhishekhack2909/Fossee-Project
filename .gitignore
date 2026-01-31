@@ -49,3 +49,15 @@ desktop.ini
 *.bak
 *.tmp
 .cache/
+
+# Test and documentation files (not needed for submission)
+test_*.py
+test_*.pdf
+*_GUIDE.md
+*_CHECKLIST.md
+*_SUMMARY.md
+*_STRUCTURE.md
+TESTING_*.md
+QUICK_*.md
+DESIGN_*.md
+AUTHENTICATION_*.md

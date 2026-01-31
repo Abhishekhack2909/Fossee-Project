@@ -63,7 +63,7 @@ class ChartCanvas(FigureCanvas):
         types = list(distribution.keys())
         counts = list(distribution.values())
         
-        # Create bar chart with colors
+        # Create bar chart with vibrant colors
         colors = ['#667eea', '#764ba2', '#28a745', '#ffc107', '#dc3545', '#17a2b8']
         bar_colors = colors[:len(types)]
         
@@ -136,7 +136,7 @@ class MainWindow(QMainWindow):
         header = QLabel('Chemical Equipment Parameter Visualizer')
         header.setFont(QFont('Arial', 16, QFont.Bold))
         header.setAlignment(Qt.AlignCenter)
-        header.setStyleSheet('color: #667eea; padding: 10px;')
+        header.setStyleSheet('color: #2c2c2c; padding: 10px;')
         main_layout.addWidget(header)
         
         # Content area (horizontal split)
@@ -155,7 +155,7 @@ class MainWindow(QMainWindow):
         self.upload_btn.setMinimumHeight(50)
         self.upload_btn.setStyleSheet('''
             QPushButton {
-                background-color: #667eea;
+                background-color: #2c2c2c;
                 color: white;
                 border: none;
                 border-radius: 5px;
@@ -163,10 +163,10 @@ class MainWindow(QMainWindow):
                 font-weight: bold;
             }
             QPushButton:hover {
-                background-color: #5a6fd6;
+                background-color: #1a1a1a;
             }
             QPushButton:pressed {
-                background-color: #4a5fc6;
+                background-color: #0a0a0a;
             }
         ''')
         self.upload_btn.clicked.connect(self.upload_file)
@@ -210,7 +210,7 @@ class MainWindow(QMainWindow):
             value_label = QLabel('--')
             value_label.setFont(QFont('Arial', 18, QFont.Bold))
             value_label.setAlignment(Qt.AlignCenter)
-            value_label.setStyleSheet('color: #667eea;')
+            value_label.setStyleSheet('color: #2c2c2c;')
             self.stat_labels[key] = value_label
             
             name_label = QLabel(label)
