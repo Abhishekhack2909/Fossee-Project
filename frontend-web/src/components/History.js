@@ -10,8 +10,8 @@ function History({ history, onItemClick, onDownloadReport }) {
   if (!history || history.length === 0) {
     return (
       <div className="card">
-        <h2>Upload History</h2>
-        <p style={{ color: "#999", fontSize: "0.9rem" }}>No uploads yet</p>
+        <h2>Recent Uploads</h2>
+        <p style={{ color: "#999", fontSize: "0.9rem" }}>No data yet</p>
       </div>
     );
   }
@@ -35,7 +35,7 @@ function History({ history, onItemClick, onDownloadReport }) {
 
   return (
     <div className="card">
-      <h2>Upload History</h2>
+      <h2>Recent Uploads</h2>
       <div className="history-list">
         {history.map((item) => (
           <div
@@ -44,12 +44,12 @@ function History({ history, onItemClick, onDownloadReport }) {
             onClick={() => onItemClick(item)}
           >
             <div className="timestamp">{formatDate(item.uploaded_at)}</div>
-            <div className="count">{item.total_count} equipment records</div>
+            <div className="count">{item.total_count} records</div>
             <button
               className="download-btn"
               onClick={(e) => handleDownload(e, item.id)}
             >
-              Download PDF
+              Download Report
             </button>
           </div>
         ))}

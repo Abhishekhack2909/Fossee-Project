@@ -83,7 +83,7 @@ function TypeChart({ distribution }) {
 
   return (
     <div className="card">
-      <h2>Equipment Type Distribution</h2>
+      <h2>Equipment Types</h2>
       <div className="chart-container">
         <Bar data={data} options={options} />
       </div>

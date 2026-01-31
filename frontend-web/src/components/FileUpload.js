@@ -67,9 +67,9 @@ function FileUpload({ onUpload, loading }) {
         accept=".csv"
         onChange={handleFileSelect}
       />
-      <p>Drag & drop a CSV file here, or</p>
+      <p>Drop your CSV file here, or</p>
       <button className="browse-btn" disabled={loading}>
-        {loading ? "Uploading..." : "Browse Files"}
+        {loading ? "Uploading..." : "Choose File"}
       </button>
     </div>
   );

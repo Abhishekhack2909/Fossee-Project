@@ -133,7 +133,7 @@ class MainWindow(QMainWindow):
         main_layout.setContentsMargins(15, 15, 15, 15)
         
         # Header
-        header = QLabel('Chemical Equipment Parameter Visualizer')
+        header = QLabel('Equipment Data Analyzer')
         header.setFont(QFont('Arial', 16, QFont.Bold))
         header.setAlignment(Qt.AlignCenter)
         header.setStyleSheet('color: #2c2c2c; padding: 10px;')
@@ -151,7 +151,7 @@ class MainWindow(QMainWindow):
         upload_group = QGroupBox('Upload CSV')
         upload_layout = QVBoxLayout(upload_group)
         
-        self.upload_btn = QPushButton('📁 Select CSV File')
+        self.upload_btn = QPushButton('📁 Choose CSV File')
         self.upload_btn.setMinimumHeight(50)
         self.upload_btn.setStyleSheet('''
             QPushButton {
@@ -172,7 +172,7 @@ class MainWindow(QMainWindow):
         self.upload_btn.clicked.connect(self.upload_file)
         upload_layout.addWidget(self.upload_btn)
         
-        self.status_label = QLabel('Select a CSV file to upload')
+        self.status_label = QLabel('Select a CSV file to get started')
         self.status_label.setAlignment(Qt.AlignCenter)
         self.status_label.setStyleSheet('color: #666; font-size: 11px;')
         upload_layout.addWidget(self.status_label)
@@ -225,7 +225,7 @@ class MainWindow(QMainWindow):
         left_panel.addWidget(summary_group)
         
         # History section
-        history_group = QGroupBox('Upload History (Last 5)')
+        history_group = QGroupBox('Recent Uploads')
         history_layout = QVBoxLayout(history_group)
         
         self.history_list = QListWidget()
@@ -250,7 +250,7 @@ class MainWindow(QMainWindow):
         history_layout.addWidget(self.history_list)
         
         # Refresh button
-        refresh_btn = QPushButton('🔄 Refresh History')
+        refresh_btn = QPushButton('🔄 Refresh')
         refresh_btn.clicked.connect(self.load_history)
         history_layout.addWidget(refresh_btn)
         
@@ -263,7 +263,7 @@ class MainWindow(QMainWindow):
         content_layout.addWidget(left_widget)
         
         # Right panel - Chart
-        chart_group = QGroupBox('Type Distribution Chart')
+        chart_group = QGroupBox('Equipment Types')
         chart_layout = QVBoxLayout(chart_group)
         
         self.chart = ChartCanvas()

@@ -101,7 +101,7 @@ function App() {
   return (
     <div className="app">
       <header className="app-header">
-        <h1>Chemical Equipment Parameter Visualizer</h1>
+        <h1>Equipment Data Analyzer</h1>
       </header>
 
       <main className="app-main">
@@ -129,8 +129,7 @@ function App() {
             <div className="placeholder">
               <p>Upload a CSV file to see the analysis</p>
               <p className="hint">
-                CSV must have columns: Equipment Name, Type, Flowrate, Pressure,
-                Temperature
+                Required columns: Equipment Name, Type, Flowrate, Pressure, Temperature
               </p>
             </div>
           )}
