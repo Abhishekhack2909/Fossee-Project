@@ -1,6 +1,6 @@
 # Chemical Equipment Parameter Visualizer
 
-Upload CSV files with chemical equipment data and get instant analytics with charts. Works as both a web app and desktop app.
+A hybrid application for analyzing and visualizing chemical equipment data through both web and desktop interfaces. Upload CSV files with chemical equipment data and get instant analytics with charts.
 
 ## Live Demo
 
