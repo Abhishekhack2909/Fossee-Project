@@ -11,6 +11,7 @@ Just upload a CSV file and see the magic happen.
 ## What This Does
 
 This app helps you analyze chemical equipment data quickly. You upload a CSV file with equipment info (like pumps, valves, reactors), and it shows you:
+
 - Total equipment count
 - Average flowrate, pressure, and temperature
 - A colorful chart showing equipment types
@@ -20,15 +21,16 @@ This app helps you analyze chemical equipment data quickly. You upload a CSV fil
 You can use it in your browser or as a desktop application. Both connect to the same backend, so your data is always in sync.
 
 ### Key Features
-* ✅ **Hybrid Sync:** Real-time data synchronization between Web and Desktop apps.
-* ✅ **Dual Authentication:** Implements **Token-based auth** for the frontend and **Basic Authentication** for API compliance.
-* ✅ **PDF Reporting:** Auto-generates downloadable analysis reports.
-* ✅ **Interactive Charts:** Visualizes equipment distribution dynamically.
+
+- ✅ **Hybrid Sync:** Real-time data synchronization between Web and Desktop apps.
+- ✅ **Dual Authentication:** Implements **Token-based auth** for the frontend and **Basic Authentication** for API compliance.
+- ✅ **PDF Reporting:** Auto-generates downloadable analysis reports.
+- ✅ **Interactive Charts:** Visualizes equipment distribution dynamically.
 
 ## Tech Stack
 
 - **Web**: React + Chart.js
-- **Desktop**: PyQt5 + Matplotlib  
+- **Desktop**: PyQt5 + Matplotlib
 - **Backend**: Django REST Framework
 - **Database**: SQLite
 - **Data**: Pandas
@@ -44,6 +46,7 @@ Just go to https://fossee-project.vercel.app/ and upload your CSV file. Everythi
 #### Before You Start
 
 Make sure you have these installed:
+
 - **Python 3.9+**: https://www.python.org/downloads/
 - **Node.js 16+**: https://nodejs.org/
 - **Git**: https://git-scm.com/downloads
@@ -116,11 +119,13 @@ python main.py
 ## CSV Format
 
 Your CSV needs these columns:
+
 ```
 Equipment Name, Type, Flowrate, Pressure, Temperature
 ```
 
 Example:
+
 ```csv
 Equipment Name,Type,Flowrate,Pressure,Temperature
 Pump-001,Pump,150.5,25.3,45.2
@@ -140,6 +145,7 @@ Heat-Exchanger-001,Heat Exchanger,200.3,30.5,85.4
 ## How the App Works
 
 When you upload a CSV file:
+
 1. The file goes to the Django backend
 2. Pandas reads and analyzes the data
 3. The backend calculates averages and counts equipment types
@@ -168,7 +174,8 @@ Install PyQt5 with `pip install PyQt5`
 Check your CSV has the right columns and is UTF-8 encoded
 
 ## Common Setup Notes
-* **"Staticfiles" Warning:** If you see `UserWarning: No directory at: ...\backend\staticfiles\` when running the server, **you can safely ignore it**. This is a cloud deployment setting and does not affect local testing.
+
+- **"Staticfiles" Warning:** If you see `UserWarning: No directory at: ...\backend\staticfiles\` when running the server, **you can safely ignore it**. This is a cloud deployment setting and does not affect local testing.
 
 ## About
 
