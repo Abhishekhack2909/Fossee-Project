@@ -29,35 +29,72 @@ You can use it in your browser or as a desktop application. Both connect to the 
 
 ## How to Use
 
-### Easiest Way - Web App
+### Option 1: Use the Live Web App (No Setup Required)
 
-Go to https://fossee-project.vercel.app/ and upload your CSV. That's it.
+Just go to https://fossee-project.vercel.app/ and upload your CSV file. Everything is already running in the cloud.
 
-### Run It Locally
+### Option 2: Run Everything Locally
 
-Need Python 3.9+ and Node.js 16+
+You'll need Python 3.9 or higher and Node.js 16 or higher installed on your computer.
 
-**Start the Backend:**
+#### Step 1: Set Up the Backend
+
+Open your terminal and run these commands one by one:
+
 ```bash
+# Go to the backend folder
 cd backend
+
+# Install all the required Python packages
 pip install -r requirements.txt
+
+# Set up the database (creates db.sqlite3 file)
 python manage.py migrate
+
+# Start the backend server
 python manage.py runserver
 ```
 
-**Start the Web App:**
+The backend will start at `http://127.0.0.1:8000`. Keep this terminal window open.
+
+#### Step 2: Set Up the Web Frontend
+
+Open a new terminal window and run:
+
 ```bash
+# Go to the web frontend folder
 cd frontend-web
+
+# Install all the required packages
 npm install
+
+# Start the web app
 npm start
 ```
 
-**Run the Desktop App:**
+Your browser will automatically open to `http://localhost:3000`. If it doesn't, just type that URL in your browser.
+
+#### Step 3: Run the Desktop App (Optional)
+
+Open another new terminal window and run:
+
 ```bash
+# Go to the desktop app folder
 cd frontend-desktop
+
+# Install the required packages
 pip install -r requirements.txt
+
+# Run the desktop application
 python main.py
 ```
+
+A window will pop up with the desktop version of the app.
+
+**Important Notes:**
+- The backend must be running for the web and desktop apps to work
+- If you're running locally, the apps will use your local backend at `http://127.0.0.1:8000`
+- The desktop app in this repo is already configured to use the live backend, so it works without running the local backend
 
 ## CSV Format
 
@@ -83,13 +120,15 @@ Heat-Exchanger-001,Heat Exchanger,200.3,30.5,85.4
 └── README.md
 ```
 
-## API Endpoints
+## How the App Works
 
-The backend is live at: https://chemical-equipment-backend-oelr.onrender.com
-
-- `POST /api/upload/` - Upload CSV
-- `GET /api/history/` - Get last 5 uploads
-- `GET /api/report/<id>/` - Download PDF
+When you upload a CSV file:
+1. The file goes to the Django backend
+2. Pandas reads and analyzes the data
+3. The backend calculates averages and counts equipment types
+4. Results are saved in SQLite database (keeps last 5 uploads)
+5. The frontend displays the statistics and chart
+6. You can download a PDF report anytime
 
 ## Deployment
 
