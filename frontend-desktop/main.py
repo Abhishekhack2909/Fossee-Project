@@ -16,7 +16,7 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 
 
-API_BASE = 'https://chemical-equipment-backend-oelr.onrender.com/api'
+API_BASE = 'http://127.0.0.1:8000/api'
 
 
 class ChartCanvas(FigureCanvas):

@@ -14,7 +14,8 @@ import TypeChart from "./components/TypeChart";
 import History from "./components/History";
 
 // API base URL - Django backend
-const API_BASE = "https://chemical-equipment-backend-oelr.onrender.com/api";
+// Uses environment variable on Vercel, localhost for local development
+const API_BASE = process.env.REACT_APP_API_URL || "http://127.0.0.1:8000/api";
 
 function App() {
   // State for current summary (after upload)
