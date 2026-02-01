@@ -19,6 +19,12 @@ This app helps you analyze chemical equipment data quickly. You upload a CSV fil
 
 You can use it in your browser or as a desktop application. Both connect to the same backend, so your data is always in sync.
 
+### Key Features
+* ✅ **Hybrid Sync:** Real-time data synchronization between Web and Desktop apps.
+* ✅ **Dual Authentication:** Implements **Token-based auth** for the frontend and **Basic Authentication** for API compliance.
+* ✅ **PDF Reporting:** Auto-generates downloadable analysis reports.
+* ✅ **Interactive Charts:** Visualizes equipment distribution dynamically.
+
 ## Tech Stack
 
 - **Web**: React + Chart.js
@@ -60,8 +66,12 @@ cd backend
 # Install all the required Python packages
 pip install -r requirements.txt
 
-# Set up the database (creates db.sqlite3 file)
+# Set up the database
 python manage.py migrate
+
+# Create your own Admin User (Required for Basic Auth testing)
+python manage.py createsuperuser
+# (You will be prompted to create your own username and password)
 
 # Start the backend server
 python manage.py runserver
@@ -86,9 +96,9 @@ npm start
 
 Your browser will automatically open to `http://localhost:3000`. If it doesn't, just type that URL in your browser.
 
-#### Step 3: Run the Desktop App (Optional)
+#### Step 3: Run the Desktop App
 
-Open another new terminal window and run:
+Open a new terminal window and run:
 
 ```bash
 # Go to the desktop app folder
@@ -101,12 +111,7 @@ pip install -r requirements.txt
 python main.py
 ```
 
-A window will pop up with the desktop version of the app.
-
-**Important Notes:**
-- The backend must be running for the web and desktop apps to work
-- If you're running locally, the apps will use your local backend at `http://127.0.0.1:8000`
-- The desktop app in this repo is already configured to use the live backend, so it works without running the local backend
+**Note:** By default, the Desktop App connects to your Local Backend (`http://127.0.0.1:8000`). Ensure Step 1 is running first.
 
 ## CSV Format
 
@@ -161,6 +166,9 @@ Install PyQt5 with `pip install PyQt5`
 
 **Upload fails?**  
 Check your CSV has the right columns and is UTF-8 encoded
+
+## Common Setup Notes
+* **"Staticfiles" Warning:** If you see `UserWarning: No directory at: ...\backend\staticfiles\` when running the server, **you can safely ignore it**. This is a cloud deployment setting and does not affect local testing.
 
 ## About
 
