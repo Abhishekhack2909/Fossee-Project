@@ -35,7 +35,19 @@ Just go to https://fossee-project.vercel.app/ and upload your CSV file. Everythi
 
 ### Option 2: Run Everything Locally
 
-You'll need Python 3.9 or higher and Node.js 16 or higher installed on your computer.
+#### Before You Start
+
+Make sure you have these installed:
+- **Python 3.9+**: https://www.python.org/downloads/
+- **Node.js 16+**: https://nodejs.org/
+- **Git**: https://git-scm.com/downloads
+
+#### Clone the Repository
+
+```bash
+git clone https://github.com/Abhishekhack2909/Fossee-Project.git
+cd Fossee-Project
+```
 
 #### Step 1: Set Up the Backend
 
