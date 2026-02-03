@@ -4,7 +4,7 @@ A hybrid application for analyzing and visualizing chemical equipment data throu
 
 ## Demo
 
-https://github.com/Abhishekhack2909/Fossee-Project/raw/main/frontend-web/public/fossee.mp4
+![Demo](frontend-web/public/fossee.gif)
 
 ## Live Demo
 
