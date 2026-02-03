@@ -2,6 +2,10 @@
 
 A hybrid application for analyzing and visualizing chemical equipment data through both web and desktop interfaces. Upload CSV files with chemical equipment data and get instant analytics with charts.
 
+## Demo
+
+![Demo](frontend-web/public/fossee.gif)
+
 ## Live Demo
 
 **Try it here**: https://fossee-project.vercel.app/
