@@ -9,37 +9,25 @@
 
 A hybrid application for analyzing and visualizing chemical equipment data through both web and desktop interfaces. Upload CSV files with chemical equipment data and get instant analytics with charts.
 
-## Architecture Diagram
+## Architecture
 
-```mermaid
-flowchart TB
-    subgraph Frontend["🖥️ Frontend Layer"]
-        Web["React + Chart.js<br/>(Web App)"]
-        Desktop["PyQt5 + Matplotlib<br/>(Desktop App)"]
-    end
-
-    subgraph Backend["⚙️ Backend Layer"]
-        API["Django REST Framework"]
-        Process["Pandas Processing"]
-    end
-
-    subgraph Data["🗄️ Data Layer"]
-        DB[(SQLite Database)]
-    end
-
-    Web -->|"REST API<br/>Token Auth"| API
-    Desktop -->|"REST API<br/>Basic Auth"| API
-    API --> Process
-    Process --> DB
 ```
-
-| Layer    | Component       | Technology            | Purpose                               |
-| -------- | --------------- | --------------------- | ------------------------------------- |
-| Frontend | Web App         | React, Chart.js       | Browser-based interface               |
-| Frontend | Desktop App     | PyQt5, Matplotlib     | Native desktop interface              |
-| Backend  | REST API        | Django REST Framework | Request handling, authentication      |
-| Backend  | Data Processing | Pandas                | CSV parsing and statistical analysis  |
-| Database | Storage         | SQLite                | Persistent storage for upload history |
+┌─────────────────┐      ┌─────────────────┐
+│  React Web App  │      │ PyQt5 Desktop   │
+│  (Chart.js)     │      │ (Matplotlib)    │
+└────────┬────────┘      └────────┬────────┘
+         │ Token Auth             │ Basic Auth
+         └──────────┬─────────────┘
+                    ▼
+         ┌─────────────────────┐
+         │  Django REST API    │
+         │  (Pandas Processing)│
+         └──────────┬──────────┘
+                    ▼
+         ┌─────────────────────┐
+         │   SQLite Database   │
+         └─────────────────────┘
+```
 
 ## Demo
 
@@ -51,24 +39,14 @@ flowchart TB
 
 Upload a CSV file to view the analysis results instantly.
 
-## What This Does
+## Features
 
-This app helps you analyze chemical equipment data quickly. You upload a CSV file with equipment info (like pumps, valves, reactors), and it shows you:
-
-- Total equipment count
-- Average flowrate, pressure, and temperature
-- A colorful chart showing equipment types
-- Your last 5 uploads
-- PDF reports you can download
-
-You can use it in your browser or as a desktop application. Both interfaces connect to the same backend API, ensuring data consistency across platforms.
-
-### Key Features
-
-- ✅ **Unified Backend:** Both Web and Desktop clients connect to the same Django API, ensuring consistent data across platforms.
-- ✅ **Dual Authentication:** Implements **Token-based auth** for the web frontend and **Basic Authentication** for API compliance.
-- ✅ **PDF Reporting:** Generates downloadable analysis reports on demand.
-- ✅ **Interactive Charts:** Visualizes equipment type distribution with dynamic charting.
+- **CSV Analysis**: Upload equipment data and receive statistical summaries (count, averages for flowrate/pressure/temperature)
+- **Equipment Visualization**: Interactive charts showing equipment type distribution
+- **Upload History**: Maintains last 5 upload records for reference
+- **PDF Reports**: Generate downloadable analysis reports
+- **Cross-Platform**: Access via web browser or native desktop application
+- **Dual Authentication**: Token-based auth (web) and Basic Authentication (desktop/API)
 
 ## Tech Stack
 
@@ -185,41 +163,30 @@ Heat-Exchanger-001,Heat Exchanger,200.3,30.5,85.4
 └── README.md
 ```
 
-## How the App Works
+## Design Decisions
 
-When you upload a CSV file:
-
-1. The file goes to the Django backend
-2. Pandas reads and analyzes the data
-3. The backend calculates averages and counts equipment types
-4. Results are saved in SQLite database (keeps last 5 uploads)
-5. The frontend displays the statistics and chart
-6. You can download a PDF report anytime
+| Decision | Rationale |
+|----------|----------|
+| **PyQt5** for desktop | Aligns with Python scientific ecosystem commonly used in FOSSEE projects |
+| **Pandas** for data processing | Industry-standard library for CSV parsing and statistical analysis |
+| **SQLite** for storage | Lightweight, zero-configuration database suitable for single-user local history |
+| **Django REST Framework** | Mature framework with built-in authentication and serialization support |
+| **Chart.js / Matplotlib** | Platform-appropriate charting libraries for web and desktop respectively |
 
 ## Deployment
 
-- **Web**: Hosted on Vercel
-- **Backend**: Hosted on Render
-- **Database**: SQLite
+| Component | Platform |
+|-----------|----------|
+| Web Frontend | Vercel |
+| Backend API | Render |
+| Database | SQLite (file-based) |
 
-## Common Issues
+## Troubleshooting
 
-**Backend not starting?**  
-Make sure you have Python 3.9+ and ran `pip install -r requirements.txt`
-
-**Web app not loading?**  
-Check Node.js version and try deleting `node_modules` then run `npm install` again
-
-**Desktop app crashes?**  
-Install PyQt5 with `pip install PyQt5`
-
-**Upload fails?**  
-Check your CSV has the right columns and is UTF-8 encoded
-
-## Common Setup Notes
-
-- **"Staticfiles" Warning:** If you see `UserWarning: No directory at: ...\backend\staticfiles\` when running the server, **you can safely ignore it**. This is a cloud deployment setting and does not affect local testing.
-
-## About
-
-Built for the FOSSEE Internship Screening Task. This project demonstrates full-stack development with Django, React, and PyQt5.
+| Issue | Solution |
+|-------|----------|
+| Backend not starting | Ensure Python 3.9+ is installed and run `pip install -r requirements.txt` |
+| Web app not loading | Check Node.js version; try deleting `node_modules` and run `npm install` again |
+| Desktop app crashes | Install PyQt5: `pip install PyQt5` |
+| Upload fails | Verify CSV has correct columns and is UTF-8 encoded |
+| "Staticfiles" warning | Safe to ignore — this is a cloud deployment setting |
