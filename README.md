@@ -11,8 +11,6 @@ A hybrid application for analyzing and visualizing chemical equipment data throu
 
 ## Architecture
 
-<div align="center">
-
 ```
 ┌─────────────────┐      ┌─────────────────┐
 │  React Web App  │      │ PyQt5 Desktop   │
@@ -30,8 +28,6 @@ A hybrid application for analyzing and visualizing chemical equipment data throu
          │   SQLite Database   │
          └─────────────────────┘
 ```
-
-</div>
 
 ## Demo
 
