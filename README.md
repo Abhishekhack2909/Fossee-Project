@@ -11,59 +11,35 @@ A hybrid application for analyzing and visualizing chemical equipment data throu
 
 ## Architecture Diagram
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                        FRONTEND LAYER                           │
-├─────────────────────────────┬───────────────────────────────────┤
-│                             │                                   │
-│   ┌─────────────────────┐   │   ┌─────────────────────────┐     │
-│   │   React + Chart.js  │   │   │   PyQt5 + Matplotlib    │     │
-│   │     (Web App)       │   │   │    (Desktop App)        │     │
-│   │                     │   │   │                         │     │
-│   │  • File Upload      │   │   │  • File Upload          │     │
-│   │  • Statistics View  │   │   │  • Statistics View      │     │
-│   │  • Type Charts      │   │   │  • Type Charts          │     │
-│   │  • PDF Download     │   │   │  • PDF Download         │     │
-│   └──────────┬──────────┘   │   └───────────┬─────────────┘     │
-│              │              │               │                   │
-└──────────────┼──────────────┴───────────────┼───────────────────┘
-               │                              │
-               │    HTTP REST API Calls       │
-               │   (Token / Basic Auth)       │
-               ▼                              ▼
-┌─────────────────────────────────────────────────────────────────┐
-│                        BACKEND LAYER                            │
-│                                                                 │
-│   ┌─────────────────────────────────────────────────────────┐   │
-│   │              Django REST Framework API                  │   │
-│   │                                                         │   │
-│   │  Endpoints:                                             │   │
-│   │  • POST /api/upload/    → Process CSV & Return Stats    │   │
-│   │  • GET  /api/history/   → Retrieve Upload History       │   │
-│   │  • GET  /api/report/    → Generate PDF Report           │   │
-│   │                                                         │   │
-│   │  Processing: Pandas for CSV Analysis                    │   │
-│   └──────────────────────────┬──────────────────────────────┘   │
-│                              │                                  │
-│                              ▼                                  │
-│   ┌─────────────────────────────────────────────────────────┐   │
-│   │                    SQLite Database                      │   │
-│   │                                                         │   │
-│   │  • Stores upload history (last 5 records)               │   │
-│   │  • Equipment statistics                                 │   │
-│   │  • Analysis results                                     │   │
-│   └─────────────────────────────────────────────────────────┘   │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TB
+    subgraph Frontend["🖥️ Frontend Layer"]
+        Web["React + Chart.js<br/>(Web App)"]
+        Desktop["PyQt5 + Matplotlib<br/>(Desktop App)"]
+    end
+    
+    subgraph Backend["⚙️ Backend Layer"]
+        API["Django REST Framework"]
+        Process["Pandas Processing"]
+    end
+    
+    subgraph Data["🗄️ Data Layer"]
+        DB[(SQLite Database)]
+    end
+    
+    Web -->|"REST API<br/>Token Auth"| API
+    Desktop -->|"REST API<br/>Basic Auth"| API
+    API --> Process
+    Process --> DB
 ```
 
-### Simple Flow
-
-```
-React (Web)  ────┐
-                 ├──→  Django REST API  ──→  SQLite Database
-PyQt5 (Desktop) ─┘
-```
+| Layer | Component | Technology | Purpose |
+|-------|-----------|------------|---------|
+| Frontend | Web App | React, Chart.js | Browser-based interface |
+| Frontend | Desktop App | PyQt5, Matplotlib | Native desktop interface |
+| Backend | REST API | Django REST Framework | Request handling, authentication |
+| Backend | Data Processing | Pandas | CSV parsing and statistical analysis |
+| Database | Storage | SQLite | Persistent storage for upload history |
 
 ## Demo
 
@@ -73,7 +49,7 @@ PyQt5 (Desktop) ─┘
 
 **Try it here**: https://fossee-project.vercel.app/
 
-Just upload a CSV file and see the magic happen.
+Upload a CSV file to view the analysis results instantly.
 
 ## What This Does
 
@@ -85,14 +61,14 @@ This app helps you analyze chemical equipment data quickly. You upload a CSV fil
 - Your last 5 uploads
 - PDF reports you can download
 
-You can use it in your browser or as a desktop application. Both connect to the same backend, so your data is always in sync.
+You can use it in your browser or as a desktop application. Both interfaces connect to the same backend API, ensuring data consistency across platforms.
 
 ### Key Features
 
-- ✅ **Hybrid Sync:** Real-time data synchronization between Web and Desktop apps.
-- ✅ **Dual Authentication:** Implements **Token-based auth** for the frontend and **Basic Authentication** for API compliance.
-- ✅ **PDF Reporting:** Auto-generates downloadable analysis reports.
-- ✅ **Interactive Charts:** Visualizes equipment distribution dynamically.
+- ✅ **Unified Backend:** Both Web and Desktop clients connect to the same Django API, ensuring consistent data across platforms.
+- ✅ **Dual Authentication:** Implements **Token-based auth** for the web frontend and **Basic Authentication** for API compliance.
+- ✅ **PDF Reporting:** Generates downloadable analysis reports on demand.
+- ✅ **Interactive Charts:** Visualizes equipment type distribution with dynamic charting.
 
 ## Tech Stack
 
