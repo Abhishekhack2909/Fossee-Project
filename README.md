@@ -165,28 +165,28 @@ Heat-Exchanger-001,Heat Exchanger,200.3,30.5,85.4
 
 ## Design Decisions
 
-| Decision | Rationale |
-|----------|----------|
-| **PyQt5** for desktop | Aligns with Python scientific ecosystem commonly used in FOSSEE projects |
-| **Pandas** for data processing | Industry-standard library for CSV parsing and statistical analysis |
-| **SQLite** for storage | Lightweight, zero-configuration database suitable for single-user local history |
-| **Django REST Framework** | Mature framework with built-in authentication and serialization support |
-| **Chart.js / Matplotlib** | Platform-appropriate charting libraries for web and desktop respectively |
+| Decision                       | Rationale                                                                       |
+| ------------------------------ | ------------------------------------------------------------------------------- |
+| **PyQt5** for desktop          | Aligns with Python scientific ecosystem commonly used in FOSSEE projects        |
+| **Pandas** for data processing | Industry-standard library for CSV parsing and statistical analysis              |
+| **SQLite** for storage         | Lightweight, zero-configuration database suitable for single-user local history |
+| **Django REST Framework**      | Mature framework with built-in authentication and serialization support         |
+| **Chart.js / Matplotlib**      | Platform-appropriate charting libraries for web and desktop respectively        |
 
 ## Deployment
 
-| Component | Platform |
-|-----------|----------|
-| Web Frontend | Vercel |
-| Backend API | Render |
-| Database | SQLite (file-based) |
+| Component    | Platform            |
+| ------------ | ------------------- |
+| Web Frontend | Vercel              |
+| Backend API  | Render              |
+| Database     | SQLite (file-based) |
 
 ## Troubleshooting
 
-| Issue | Solution |
-|-------|----------|
-| Backend not starting | Ensure Python 3.9+ is installed and run `pip install -r requirements.txt` |
-| Web app not loading | Check Node.js version; try deleting `node_modules` and run `npm install` again |
-| Desktop app crashes | Install PyQt5: `pip install PyQt5` |
-| Upload fails | Verify CSV has correct columns and is UTF-8 encoded |
-| "Staticfiles" warning | Safe to ignore — this is a cloud deployment setting |
+| Issue                 | Solution                                                                       |
+| --------------------- | ------------------------------------------------------------------------------ |
+| Backend not starting  | Ensure Python 3.9+ is installed and run `pip install -r requirements.txt`      |
+| Web app not loading   | Check Node.js version; try deleting `node_modules` and run `npm install` again |
+| Desktop app crashes   | Install PyQt5: `pip install PyQt5`                                             |
+| Upload fails          | Verify CSV has correct columns and is UTF-8 encoded                            |
+| "Staticfiles" warning | Safe to ignore — this is a cloud deployment setting                            |
