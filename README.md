@@ -78,7 +78,7 @@ You can use it in your browser or as a desktop application. Both interfaces conn
 - **Database**: SQLite
 - **Data**: Pandas
 
-## How to Use
+## Setup Instructions
 
 ### Option 1: Use the Live Web App (No Setup Required)
 
