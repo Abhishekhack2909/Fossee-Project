@@ -17,29 +17,29 @@ flowchart TB
         Web["React + Chart.js<br/>(Web App)"]
         Desktop["PyQt5 + Matplotlib<br/>(Desktop App)"]
     end
-    
+
     subgraph Backend["⚙️ Backend Layer"]
         API["Django REST Framework"]
         Process["Pandas Processing"]
     end
-    
+
     subgraph Data["🗄️ Data Layer"]
         DB[(SQLite Database)]
     end
-    
+
     Web -->|"REST API<br/>Token Auth"| API
     Desktop -->|"REST API<br/>Basic Auth"| API
     API --> Process
     Process --> DB
 ```
 
-| Layer | Component | Technology | Purpose |
-|-------|-----------|------------|---------|
-| Frontend | Web App | React, Chart.js | Browser-based interface |
-| Frontend | Desktop App | PyQt5, Matplotlib | Native desktop interface |
-| Backend | REST API | Django REST Framework | Request handling, authentication |
-| Backend | Data Processing | Pandas | CSV parsing and statistical analysis |
-| Database | Storage | SQLite | Persistent storage for upload history |
+| Layer    | Component       | Technology            | Purpose                               |
+| -------- | --------------- | --------------------- | ------------------------------------- |
+| Frontend | Web App         | React, Chart.js       | Browser-based interface               |
+| Frontend | Desktop App     | PyQt5, Matplotlib     | Native desktop interface              |
+| Backend  | REST API        | Django REST Framework | Request handling, authentication      |
+| Backend  | Data Processing | Pandas                | CSV parsing and statistical analysis  |
+| Database | Storage         | SQLite                | Persistent storage for upload history |
 
 ## Demo
 
