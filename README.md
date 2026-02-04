@@ -1,6 +1,69 @@
 # Chemical Equipment Parameter Visualizer
 
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![Django](https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![SQLite](https://img.shields.io/badge/SQLite-07405E?style=for-the-badge&logo=sqlite&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
+![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
+
 A hybrid application for analyzing and visualizing chemical equipment data through both web and desktop interfaces. Upload CSV files with chemical equipment data and get instant analytics with charts.
+
+## Architecture Diagram
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                        FRONTEND LAYER                           │
+├─────────────────────────────┬───────────────────────────────────┤
+│                             │                                   │
+│   ┌─────────────────────┐   │   ┌─────────────────────────┐     │
+│   │   React + Chart.js  │   │   │   PyQt5 + Matplotlib    │     │
+│   │     (Web App)       │   │   │    (Desktop App)        │     │
+│   │                     │   │   │                         │     │
+│   │  • File Upload      │   │   │  • File Upload          │     │
+│   │  • Statistics View  │   │   │  • Statistics View      │     │
+│   │  • Type Charts      │   │   │  • Type Charts          │     │
+│   │  • PDF Download     │   │   │  • PDF Download         │     │
+│   └──────────┬──────────┘   │   └───────────┬─────────────┘     │
+│              │              │               │                   │
+└──────────────┼──────────────┴───────────────┼───────────────────┘
+               │                              │
+               │    HTTP REST API Calls       │
+               │   (Token / Basic Auth)       │
+               ▼                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                        BACKEND LAYER                            │
+│                                                                 │
+│   ┌─────────────────────────────────────────────────────────┐   │
+│   │              Django REST Framework API                  │   │
+│   │                                                         │   │
+│   │  Endpoints:                                             │   │
+│   │  • POST /api/upload/    → Process CSV & Return Stats    │   │
+│   │  • GET  /api/history/   → Retrieve Upload History       │   │
+│   │  • GET  /api/report/    → Generate PDF Report           │   │
+│   │                                                         │   │
+│   │  Processing: Pandas for CSV Analysis                    │   │
+│   └──────────────────────────┬──────────────────────────────┘   │
+│                              │                                  │
+│                              ▼                                  │
+│   ┌─────────────────────────────────────────────────────────┐   │
+│   │                    SQLite Database                      │   │
+│   │                                                         │   │
+│   │  • Stores upload history (last 5 records)               │   │
+│   │  • Equipment statistics                                 │   │
+│   │  • Analysis results                                     │   │
+│   └─────────────────────────────────────────────────────────┘   │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### Simple Flow
+
+```
+React (Web)  ────┐
+                 ├──→  Django REST API  ──→  SQLite Database
+PyQt5 (Desktop) ─┘
+```
 
 ## Demo
 
